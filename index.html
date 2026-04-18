@@ -1,0 +1,2244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Twinbyte Technology — Creative Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #0a0a0a;
+    --white: #f5f2ec;
+    --cream: #ede9df;
+    --accent: #c8a96e;
+    --accent2: #4a6741;
+    --muted: #888070;
+    --border: rgba(200,169,110,0.25);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    width: 10px; height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.15s ease-out, width 0.3s, height 0.3s;
+    opacity: 0.6;
+  }
+  body:hover .cursor { opacity: 1; }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9000;
+    opacity: 0.3;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 2rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 0.78rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--white); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 8rem 4rem 6rem;
+    position: relative;
+    z-index: 2;
+  }
+  .hero-tag {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .hero-tag::before {
+    content: '';
+    width: 32px;
+    height: 1px;
+    background: var(--accent);
+    display: inline-block;
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 6vw, 7rem);
+    font-weight: 900;
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    margin-bottom: 2rem;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .hero-desc {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--muted);
+    max-width: 380px;
+    margin-bottom: 3rem;
+  }
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--accent);
+    color: var(--black);
+    padding: 1rem 2rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+  .hero-cta:hover { background: var(--white); }
+  .hero-cta .arrow { transition: transform 0.3s; }
+  .hero-cta:hover .arrow { transform: translateX(6px); }
+
+  .hero-right {
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-right::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, var(--black) 0%, transparent 30%);
+    z-index: 1;
+  }
+  .hero-bg-text {
+    position: absolute;
+    bottom: -2rem;
+    right: -1rem;
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(10rem, 20vw, 22rem);
+    font-weight: 900;
+    color: rgba(200,169,110,0.04);
+    letter-spacing: -0.05em;
+    line-height: 1;
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  /* Animated shapes in hero */
+  .shape-1, .shape-2, .shape-3 {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.08;
+    animation: float 8s ease-in-out infinite;
+  }
+  .shape-1 { width: 300px; height: 300px; background: var(--accent); top: 20%; right: 15%; animation-delay: 0s; }
+  .shape-2 { width: 180px; height: 180px; background: var(--accent2); bottom: 30%; right: 30%; animation-delay: 3s; }
+  .shape-3 { width: 80px; height: 80px; background: var(--accent); top: 40%; right: 5%; animation-delay: 5s; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
+
+  /* Scroll indicator */
+  .scroll-hint {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--muted);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .scroll-line {
+    width: 1px;
+    height: 50px;
+    background: linear-gradient(to bottom, transparent, var(--accent));
+    animation: scrollpulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollpulse {
+    0%, 100% { opacity: 0.3; transform: scaleY(0.7); }
+    50% { opacity: 1; transform: scaleY(1); }
+  }
+
+  /* MARQUEE */
+  .marquee-wrap {
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 0;
+    background: rgba(200,169,110,0.03);
+  }
+  .marquee-track {
+    display: flex;
+    white-space: nowrap;
+    animation: marquee 20s linear infinite;
+    gap: 0;
+  }
+  .marquee-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0 2rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .marquee-dot {
+    width: 4px; height: 4px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* SECTION BASE */
+  section { padding: 7rem 4rem; }
+  .section-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .section-label::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--accent);
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 4vw, 4.5rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+  }
+  .section-title em { font-style: italic; color: var(--accent); }
+
+  /* ABOUT */
+  .about {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: start;
+    border-top: 1px solid var(--border);
+  }
+  .about-left {}
+  .about-body {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: rgba(245,242,236,0.7);
+    margin-bottom: 2rem;
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+  .stat-card {
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--accent);
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+  .stat-label {
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* Team cards on the right */
+  .about-right {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .member-card {
+    border: 1px solid var(--border);
+    padding: 2rem;
+    transition: border-color 0.3s, background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .member-card:hover {
+    border-color: var(--accent);
+    background: rgba(200,169,110,0.04);
+  }
+  .member-avatar {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--black);
+    margin-bottom: 1.2rem;
+  }
+  .member-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+  .member-role {
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+  .member-bio {
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+  .member-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.2rem;
+  }
+  .skill-tag {
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--border);
+    padding: 0.3rem 0.75rem;
+  }
+
+  /* SERVICES */
+  .services { border-top: 1px solid var(--border); }
+  .services-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 4rem;
+  }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5px;
+    background: var(--border);
+  }
+  .service-card {
+    background: var(--black);
+    padding: 2.5rem;
+    transition: background 0.4s;
+    position: relative;
+    overflow: hidden;
+  }
+  .service-card:hover { background: rgba(200,169,110,0.05); }
+  .service-card:hover .service-num { color: var(--accent); }
+  .service-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: rgba(200,169,110,0.3);
+    margin-bottom: 2rem;
+    transition: color 0.4s;
+  }
+  .service-icon {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    display: block;
+  }
+  .service-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .service-desc {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  /* WORKS */
+  .works { border-top: 1px solid var(--border); }
+  .works-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+  }
+  .works-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 1.5px;
+    background: var(--border);
+  }
+  .work-card {
+    background: var(--black);
+    padding: 3rem;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: background 0.4s;
+  }
+  .work-card:hover { background: rgba(200,169,110,0.04); }
+  .work-thumb {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 6rem;
+    opacity: 0.05;
+    transition: opacity 0.4s, transform 0.6s;
+  }
+  .work-card:hover .work-thumb { opacity: 0.1; transform: scale(1.1); }
+  .work-tag {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+  .work-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 0.75rem;
+  }
+  .work-meta {
+    font-size: 0.8rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .work-link {
+    width: 32px; height: 32px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .work-link:hover { background: var(--accent); color: var(--black); border-color: var(--accent); }
+
+  /* CONTACT */
+  .contact {
+    border-top: 1px solid var(--border);
+    padding: 8rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .contact-bg-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(8rem, 18vw, 20rem);
+    font-weight: 900;
+    color: rgba(200,169,110,0.03);
+    letter-spacing: -0.05em;
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  .contact-inner {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 6rem;
+    align-items: start;
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .contact-left {}
+  .contact-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 4.5vw, 5.5rem);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+  }
+  .contact-title em { font-style: italic; color: var(--accent); }
+  .contact-sub {
+    font-size: 1.05rem;
+    color: var(--muted);
+    line-height: 1.75;
+    margin-bottom: 3.5rem;
+  }
+
+  .contact-info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .contact-info-item {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+  }
+  .contact-info-icon {
+    width: 44px; height: 44px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    color: var(--accent);
+    flex-shrink: 0;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .contact-info-item:hover .contact-info-icon {
+    border-color: var(--accent);
+    background: rgba(200,169,110,0.08);
+  }
+  .contact-info-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.2rem;
+  }
+  .contact-info-value {
+    font-size: 0.92rem;
+    color: var(--white);
+  }
+
+  .contact-availability {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .availability-dot {
+    width: 8px; height: 8px;
+    background: #4ade80;
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.5);
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.5); }
+    50% { box-shadow: 0 0 0 6px rgba(74, 222, 128, 0); }
+  }
+
+  /* FORM */
+  .contact-form-wrap {
+    position: relative;
+  }
+  .contact-form-wrap::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    background: linear-gradient(135deg, rgba(200,169,110,0.2), transparent 50%, rgba(74,103,65,0.15));
+    pointer-events: none;
+    z-index: 0;
+  }
+  .contact-form {
+    background: rgba(200,169,110,0.03);
+    border: 1px solid var(--border);
+    padding: 3rem;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+
+  .form-field {
+    position: relative;
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    transition: background 0.3s;
+  }
+  .form-field:last-child { border-right: none; }
+  .form-row .form-field:last-child { border-right: none; }
+  .form-row + .form-field,
+  .form-field.full-width { border-right: none; }
+
+  .form-field:focus-within {
+    background: rgba(200,169,110,0.04);
+  }
+  .form-field label {
+    display: block;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding: 1.2rem 1.5rem 0;
+    pointer-events: none;
+    transition: color 0.3s;
+  }
+  .form-field input,
+  .form-field select,
+  .form-field textarea {
+    display: block;
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 300;
+    padding: 0.5rem 1.5rem 1.2rem;
+    resize: none;
+    -webkit-appearance: none;
+  }
+  .form-field select {
+    cursor: pointer;
+    color: var(--muted);
+  }
+  .form-field select option {
+    background: #1a1a1a;
+    color: var(--white);
+  }
+  .form-field select.selected { color: var(--white); }
+  .form-field textarea { min-height: 130px; line-height: 1.6; }
+
+  .form-field input::placeholder,
+  .form-field textarea::placeholder {
+    color: rgba(136,128,112,0.5);
+  }
+
+  /* Budget radio pills */
+  .budget-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.5rem 1.5rem 1.2rem;
+    align-items: center;
+  }
+  .budget-options label:hover {
+    border-color: rgba(200,169,110,0.5);
+    color: var(--white);
+  }
+  .budget-options input[type="radio"] { display: none; }
+  .budget-options label {
+    padding: 0.35rem 0.9rem;
+    border: 1px solid var(--border);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.25s;
+    pointer-events: all;
+    display: inline-block;
+  }
+  .budget-options input[type="radio"]:checked + label {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(200,169,110,0.1);
+  }
+  .budget-divider {
+    width: 1px;
+    height: 28px;
+    background: var(--border);
+    display: inline-block;
+    align-self: center;
+    margin: 0 0.25rem;
+  }
+
+  /* form submit row */
+  .form-submit-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 0 0;
+    gap: 1.5rem;
+    border-top: 1px solid var(--border);
+    margin-top: 0.5rem;
+  }
+  .form-note {
+    font-size: 0.75rem;
+    color: var(--muted);
+    line-height: 1.5;
+    max-width: 220px;
+  }
+  .form-submit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--accent);
+    color: var(--black);
+    border: none;
+    padding: 1rem 2rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .form-submit-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--white);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .form-submit-btn:hover::before { transform: scaleX(1); }
+  .form-submit-btn span { position: relative; z-index: 1; }
+  .form-submit-btn .btn-arrow {
+    position: relative; z-index: 1;
+    transition: transform 0.3s;
+  }
+  .form-submit-btn:hover .btn-arrow { transform: translateX(5px); }
+
+  /* Success state */
+  .form-success {
+    display: none;
+    text-align: center;
+    padding: 4rem 2rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .form-success.show { display: flex; }
+  .contact-form.submitted .form-fields { display: none; }
+  .contact-form.submitted .form-success { display: flex; }
+  .success-icon {
+    width: 60px; height: 60px;
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    color: var(--accent);
+    animation: pop-in 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards;
+  }
+  @keyframes pop-in {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .success-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+  }
+  .success-msg { font-size: 0.95rem; color: var(--muted); line-height: 1.7; }
+
+
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2.5rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--accent);
+  }
+  .footer-copy {
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .footer-socials {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+  .footer-socials a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s, border-color 0.3s, background 0.3s;
+  }
+  .footer-socials a:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: rgba(200,169,110,0.07);
+  }
+  .footer-socials a svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+  }
+
+  /* ANIMATIONS */
+  .fade-up {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  body.js-ready .fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  body.js-ready .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .fade-up:not(.js-loaded) {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+
+  /* ── HAMBURGER BUTTON ─────────────────────────── */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    z-index: 200;
+  }
+  .hamburger span {
+    display: block;
+    width: 24px;
+    height: 1.5px;
+    background: var(--accent);
+    transition: all 0.3s ease;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+  /* ── MOBILE MENU ──────────────────────────────── */
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(10,10,10,0.98);
+    z-index: 150;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    backdrop-filter: blur(10px);
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu ul { list-style: none; text-align: center; }
+  .mobile-menu ul li { margin-bottom: 2rem; }
+  .mobile-menu ul li a {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--white);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+    transition: color 0.3s;
+  }
+  .mobile-menu ul li a:hover { color: var(--accent); }
+  .mobile-close {
+    position: absolute;
+    top: 2rem; right: 2rem;
+    background: none; border: none;
+    color: var(--muted);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  .mobile-close:hover { color: var(--accent); }
+
+  /* ── TABLET (max 1024px) ──────────────────────── */
+  @media (max-width: 1024px) {
+    nav { padding: 1.5rem 2rem; }
+    .hero-left { padding: 7rem 2rem 5rem; }
+    .hero-title { font-size: clamp(3rem, 7vw, 5.5rem); }
+    section { padding: 5rem 2rem; }
+    .contact { padding: 6rem 2rem; }
+    .about { gap: 3rem; }
+    .services-grid { grid-template-columns: repeat(2, 1fr); }
+    .contact-inner { gap: 3rem; }
+    footer { padding: 2rem 2rem; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ── MOBILE (max 768px) ───────────────────────── */
+  @media (max-width: 768px) {
+    /* Nav */
+    nav { padding: 1.2rem 1.5rem; }
+    nav .nav-links { display: none; }
+    .hamburger { display: flex; }
+
+    /* Hero */
+    .hero { grid-template-columns: 1fr; min-height: 100svh; }
+    .hero-right { display: none; }
+    .hero-left { padding: 7rem 1.5rem 5rem; }
+    .hero-title { font-size: clamp(2.8rem, 11vw, 4.5rem); }
+    .hero-desc { font-size: 0.95rem; max-width: 100%; }
+    .hero-cta { width: 100%; justify-content: center; }
+
+    /* Sections */
+    section { padding: 4rem 1.5rem; }
+    .section-title { font-size: clamp(2rem, 8vw, 3rem); }
+
+    /* About */
+    .about { grid-template-columns: 1fr; gap: 3rem; }
+    .stats-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .stat-num { font-size: 2rem; }
+
+    /* Services */
+    .services-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .services-header p { max-width: 100%; }
+    .services-grid { grid-template-columns: 1fr; gap: 0; }
+    .service-card { padding: 2rem 1.5rem; }
+
+    /* Works */
+    .works-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .works-grid { grid-template-columns: 1fr; }
+    .work-card { min-height: 220px; padding: 2rem 1.5rem; }
+
+    /* Contact */
+    .contact { padding: 4rem 1.5rem; }
+    .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .contact-title { font-size: clamp(2.2rem, 9vw, 3.5rem); }
+    .contact-form { padding: 1.5rem 1.2rem; }
+    .form-row { grid-template-columns: 1fr; }
+    .form-row .form-field { border-right: none; }
+    .form-submit-row { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .form-note { max-width: 100%; }
+    .form-submit-btn { width: 100%; justify-content: center; }
+    .budget-options { gap: 0.4rem; }
+
+    /* Footer */
+    footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
+    .footer-socials { justify-content: center; }
+
+    /* Member cards */
+    .member-card { padding: 1.5rem; }
+
+    /* Hide custom cursor on touch */
+    .cursor, .cursor-ring { display: none; }
+    body { cursor: auto; }
+    a, button { cursor: pointer; }
+  }
+
+  /* ── SMALL MOBILE (max 420px) ─────────────────── */
+  @media (max-width: 420px) {
+    .hero-title { font-size: clamp(2.4rem, 12vw, 3.5rem); }
+    .stats-grid { grid-template-columns: 1fr; }
+    .hero-left { padding: 6rem 1.2rem 4rem; }
+    section { padding: 3.5rem 1.2rem; }
+    .contact { padding: 3.5rem 1.2rem; }
+    .ibl-box { padding: 2rem 1.5rem; }
+    .ibl-title { font-size: 1.9rem; }
+  }
+</style>
+</head>
+<body class="js-loaded">
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Twinbyte Technology</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#works">Works</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<!-- Mobile menu overlay -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" onclick="toggleMenu()">✕</button>
+  <ul>
+    <li><a href="#about" onclick="toggleMenu()">About</a></li>
+    <li><a href="#services" onclick="toggleMenu()">Services</a></li>
+    <li><a href="#works" onclick="toggleMenu()">Works</a></li>
+    <li><a href="#contact" onclick="toggleMenu()">Contact</a></li>
+  </ul>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">Web Development &amp; Design Studio</div>
+    <h1 class="hero-title">
+      We build<br>
+      <em>digital</em><br>
+      experiences
+    </h1>
+    <p class="hero-desc">Twinbyte Technology — a creative duo crafting purposeful, beautiful, and high-performance web experiences for ambitious clients.</p>
+    <a href="#works" class="hero-cta">View Our Work <span class="arrow">→</span></a>
+  </div>
+  <div class="hero-right">
+    <div class="shape-1"></div>
+    <div class="shape-2"></div>
+    <div class="shape-3"></div>
+    <div class="hero-bg-text">TT</div>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Web Development <span class="marquee-dot"></span></span>
+    <span class="marquee-item">UI/UX Design <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Brand Identity <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Video editing <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Graphic designs <span class="marquee-dot"></span></span>
+    <span class="marquee-item">React & Next.js <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Creative Direction <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Web Development <span class="marquee-dot"></span></span>
+    <span class="marquee-item">UI/UX Design <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Brand Identity <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Video editing <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Graphic designs <span class="marquee-dot"></span></span>
+    <span class="marquee-item">React & Next.js <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Creative Direction <span class="marquee-dot"></span></span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about fade-up" id="about">
+  <div class="about-left">
+    <div class="section-label">Our Story</div>
+    <h2 class="section-title">Crafting the <em>future</em> of web</h2>
+    <p class="about-body">Twinbyte Technology — two passionate creators who met while chasing the same obsession: building things on the internet that actually matter. Together, we combine technical depth with creative vision to deliver work that stands out.</p>
+    <p class="about-body">From pixel-perfect interfaces to scalable full-stack applications, we approach every project as a unique opportunity to push boundaries and exceed expectations.</p>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-num">10+</div>
+        <div class="stat-label">Projects Shipped</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">3+</div>
+        <div class="stat-label">Years Together</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">10+</div>
+        <div class="stat-label">Happy Clients</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Dedication</div>
+      </div>
+    </div>
+  </div>
+  <div class="about-right">
+    <div class="member-card fade-up">
+      <div class="member-avatar">M</div>
+      <div class="member-name">Manas</div>
+      <div class="member-role">Full-Stack Developer & Designer</div>
+      <div class="member-bio">Obsessed with clean code and performance. Manas architects the backbone of every product — from APIs to databases — ensuring everything works beautifully under the hood.</div>
+      <div class="member-skills">
+        <span class="skill-tag">React</span>
+        <span class="skill-tag">Node.js</span>
+        <span class="skill-tag">TypeScript</span>
+        <span class="skill-tag">Next.js</span>
+        <span class="skill-tag">Video editing</span>
+        <span class="skill-tag">Graphic designs</span>
+        <span class="skill-tag">PostgreSQL</span>
+      </div>
+    </div>
+    <div class="member-card fade-up">
+      <div class="member-avatar">M</div>
+      <div class="member-name">Manav</div>
+      <div class="member-role">Designer & Frontend Dev</div>
+      <div class="member-bio">A designer who codes. Manav turns ideas into interfaces — crafting visual languages that feel intuitive and look stunning, from first sketch to final pixel.</div>
+      <div class="member-skills">
+        <span class="skill-tag">html</span>
+        <span class="skill-tag">CSS/GSAP</span>
+        <span class="skill-tag">Framer</span>
+        <span class="skill-tag">React</span>
+        <span class="skill-tag">Branding</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services fade-up" id="services">
+  <div class="services-header">
+    <div>
+      <div class="section-label">What We Do</div>
+      <h2 class="section-title">Our <em>Services</em></h2>
+    </div>
+    <p style="max-width:340px; color: var(--muted); font-size:0.95rem; line-height:1.7;">End-to-end digital solutions — from concept to launch, and beyond.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-num">01</div>
+      <span class="service-icon">◈</span>
+      <div class="service-name">Web Design</div>
+      <p class="service-desc">Bespoke interfaces designed from the ground up. We obsess over every detail — typography, spacing, color — until it's exactly right.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-num">02</div>
+      <span class="service-icon">⟡</span>
+      <div class="service-name">Web Development</div>
+      <p class="service-desc">Fast, accessible, and rock-solid builds using modern frameworks. We write code that scales and performs under real-world conditions.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-num">03</div>
+      <span class="service-icon">✦</span>
+      <div class="service-name">Graphic designs</div>
+      <p class="service-desc">We blend creativity and strategy to deliver designs that not only look stunning but also drive engagement and results.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-num">04</div>
+      <span class="service-icon">◉</span>
+      <div class="service-name">Video editing</div>
+      <p class="service-desc">Video editing brings your stories to life by combining visuals, sound, and effects into a powerful and engaging experience.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-num">05</div>
+      <span class="service-icon">⬡</span>
+      <div class="service-name">UI/UX Consulting</div>
+      <p class="service-desc">Audits, redesigns, and strategy sessions. We diagnose what's holding your product back and show you the path forward.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-num">06</div>
+      <span class="service-icon">▸</span>
+      <div class="service-name">Motion & Animation (soon)</div>
+      <p class="service-desc">Purposeful motion that guides attention and delights users. GSAP, Framer Motion, CSS — we choose the right tool every time.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WORKS -->
+<section class="works fade-up" id="works">
+  <div class="works-header">
+    <div>
+      <div class="section-label">Portfolio</div>
+      <h2 class="section-title">Selected <em>Works</em></h2>
+    </div>
+    <a href="#contact" style="font-size:0.8rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); text-decoration:none;">Start a project →</a>
+  </div>
+  <div class="works-grid">
+    <div class="work-card">
+      <div class="work-thumb">⬡</div>
+      <div class="work-tag">SaaS · Web App</div>
+      <div class="work-title">Dashboard Analytics Platform</div>
+      <div class="work-meta">
+        <span>React · Node.js · D3</span>
+        <a href="#" class="work-link">↗</a>
+      </div>
+    </div>
+    <div class="work-card">
+      <div class="work-thumb">◈</div>
+      <div class="work-tag">Brand · Website</div>
+      <div class="work-title">Luxury Fashion Brand Site</div>
+      <div class="work-meta">
+        <span>Next.js · GSAP · Framer</span>
+        <a href="#" class="C:\Users\ASUS\OneDrive\Documents\fation.html">↗</a>
+      </div>
+    </div>
+    <div class="work-card">
+      <div class="work-thumb">✦</div>
+      <div class="work-tag">E-Commerce</div>
+      <div class="work-title">Artisan Coffee Webshop</div>
+      <div class="work-meta">
+        <span>Shopify · Custom Theme</span>
+        <a href="#" class="work-link">↗</a>
+      </div>
+    </div>
+    <div class="work-card">
+      <div class="work-thumb">◉</div>
+      <div class="work-tag">Mobile · Web</div>
+      <div class="work-title">Event Booking App</div>
+      <div class="work-meta">
+        <span>React Native · Firebase</span>
+        <a href="#" class="work-link">↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact fade-up" id="contact">
+  <div class="contact-bg-text">Hello</div>
+
+  <div class="contact-inner">
+    <!-- Left: info -->
+    <div class="contact-left">
+      <div class="section-label">Get In Touch</div>
+      <h2 class="contact-title">Let's build<br>something <em>great</em></h2>
+      <p class="contact-sub">Have a project in mind? Drop us a message and we'll get back to you within 24 hours — no fluff, just a real conversation about your vision.</p>
+
+      <div class="contact-info-list">
+        <div class="contact-info-item">
+          <div class="contact-info-icon">✉</div>
+          <div>
+            <div class="contact-info-label">Email</div>
+            <div class="contact-info-value"><a href="mailto:hello@twinbyte.tech">twinbyte.technology.02@gmail.com</a></div>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-info-icon">◎</div>
+          <div>
+            <div class="contact-info-label">Location</div>
+            <div class="contact-info-value">India , Gujrat</div>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-info-icon">⧗</div>
+          <div>
+            <div class="contact-info-label">Response Time</div>
+            <div class="contact-info-value">Within 24 hours</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-availability">
+        <div class="availability-dot"></div>
+        Available for new projects
+      </div>
+    </div>
+
+    <!-- Right: form -->
+    <div class="contact-form-wrap">
+      <div class="contact-form" id="contactForm">
+
+        <div class="form-fields">
+          <!-- Row 1: Name + Email -->
+          <div class="form-row">
+            <div class="form-field">
+              <label for="cf-name">Your Name</label>
+              <input type="text" id="cf-name" placeholder="John Doe" autocomplete="off">
+            </div>
+            <div class="form-field">
+              <label for="cf-email">Email Address</label>
+              <input type="email" id="cf-email" placeholder="john@example.com" autocomplete="off">
+            </div>
+          </div>
+
+          <!-- Row 2: Company + Service -->
+          <div class="form-row">
+            <div class="form-field">
+              <label for="cf-company">Company / Brand</label>
+              <input type="text" id="cf-company" placeholder="Optional" autocomplete="off">
+            </div>
+            <div class="form-field">
+              <label for="cf-service">Service Needed</label>
+              <select id="cf-service" onchange="this.classList.add('selected')">
+                <option value="" disabled selected>Select a service</option>
+                <option>Web Design</option>
+                <option>Web Development</option>
+                <option>Brand Identity</option>
+                <option>Video editing</option>
+                <option>UI/UX Consulting</option>
+                <option>Graphic designs</option>
+                <option>Motion & Animation (soon)</option>
+                <option>Full Project</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Budget pills -->
+          <div class="form-field full-width" style="border-right:none;">
+            <label style="padding-bottom:0.4rem;">Project Budget</label>
+            <div class="budget-options">
+              <input type="radio" name="budget" id="b1" value="<Rs10k">
+              <label for="b1">&lt; Rs 10,000</label>
+              <input type="radio" name="budget" id="b2" value="Rs10k-15k">
+              <label for="b2">Rs 10,000 – Rs 15,000</label>
+              <input type="radio" name="budget" id="b3" value="Rs15k-20k">
+              <label for="b3">Rs 15,000 – Rs 20,000</label>
+              <input type="radio" name="budget" id="b4" value="Rs20k+">
+              <label for="b4">Rs 20,000+</label>
+              <span class="budget-divider"></span>
+              <input type="radio" name="budget" id="b5" value="Let's talk">
+              <label for="b5">Let's talk</label>
+            </div>
+          </div>
+
+          <!-- Message -->
+          <div class="form-field full-width" style="border-right:none; border-bottom:none;">
+            <label for="cf-message">Tell Us About Your Project</label>
+            <textarea id="cf-message" placeholder="What are you building? What's the vision? What problem needs solving?"></textarea>
+          </div>
+
+          <!-- Submit row -->
+          <div class="form-submit-row">
+            <p class="form-note">We respect your privacy. No spam — ever.</p>
+            <button class="form-submit-btn" onclick="handleContactSubmit(event)">
+              <span>Send Message</span>
+              <span class="btn-arrow">→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Success state -->
+        <div class="form-success" id="formSuccess">
+          <div class="success-icon">✓</div>
+          <div class="success-title">Message Sent!</div>
+          <p class="success-msg">Thank you for reaching out. We'll review your project and get back to you within 24 hours.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Twinbyte Technology</div>
+  <div class="footer-copy">© 2026 Twinbyte Technology. All rights reserved.</div>
+  <div class="footer-socials">
+    <!-- Twitter / X -->
+    <a href="#" title="Twitter">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L2.25 2.25h6.831l4.259 5.633 4.904-5.633Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    </a>
+    <!-- GitHub -->
+    <a href="#" title="GitHub">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
+    </a>
+    <!-- Instagram -->
+    <a href="https://www.instagram.com/twinbyte.technology.02?igsh=MXM0MHE1YmhuemR3cQ==" title="Instagram">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+    </a>
+    <!-- LinkedIn -->
+    <a href="#" title="LinkedIn">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+    </a>
+  </div>
+</footer>
+
+<script>
+  // Contact form
+  function handleContactSubmit(e) {
+    e.preventDefault();
+    const name    = document.getElementById('cf-name').value.trim();
+    const email   = document.getElementById('cf-email').value.trim();
+    const message = document.getElementById('cf-message').value.trim();
+    if (!name || !email || !message) {
+      ['cf-name','cf-email','cf-message'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el.value.trim()) {
+          el.closest('.form-field').style.animation = 'none';
+          el.closest('.form-field').offsetHeight;
+          el.closest('.form-field').style.animation = 'shake 0.4s ease';
+        }
+      });
+      return;
+    }
+    // ── Save directly into ibMsgs (same page = same memory) ──
+    const budgetEl = document.querySelector('input[name="budget"]:checked');
+    const newMsg = {
+      id: Date.now().toString(),
+      name,
+      email,
+      company:   document.getElementById('cf-company').value.trim(),
+      service:   document.getElementById('cf-service').value || 'General Enquiry',
+      budget:    budgetEl ? budgetEl.value : '',
+      message,
+      timestamp: new Date().toISOString(),
+      status:    'new',
+      notes:     ''
+    };
+    ibMsgs.unshift(newMsg);
+    ibSave();
+    ibUpdateStats();   // refresh badge immediately
+    // ── Show success state ──
+    document.getElementById('contactForm').querySelector('.form-fields').style.display = 'none';
+    document.getElementById('formSuccess').classList.add('show');
+  }
+
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+  });
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+  document.querySelectorAll('a, button, .work-card, .member-card, .service-card, input, select, textarea').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '18px';
+      cursor.style.height = '18px';
+      ring.style.width = '52px';
+      ring.style.height = '52px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '10px';
+      cursor.style.height = '10px';
+      ring.style.width = '36px';
+      ring.style.height = '36px';
+    });
+  });
+
+
+  // Scroll animations
+  document.body.classList.add('js-ready');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 100);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  /* ═══════════════════════════════════════════════════════════
+     ADMIN INBOX  —  Ctrl+Shift+I to open, Esc to close
+     All in one file: form & inbox share the same ibMsgs array.
+     ═══════════════════════════════════════════════════════════ */
+  const IB_KEY = 'twinbyte_inbox_messages';
+  let ibMsgs   = JSON.parse(localStorage.getItem(IB_KEY) || '[]');
+  let ibFilter = 'all';
+  let ibSort   = 'newest';
+  let ibActive = null;
+
+  function ibSave() { localStorage.setItem(IB_KEY, JSON.stringify(ibMsgs)); }
+
+  // ── Open / close ──────────────────────────────────────────
+  function ibTryOpen() {
+    const creds = JSON.parse(localStorage.getItem('twinbyte_admin_creds') || 'null');
+    if (!creds) { ibShowSetup(); return; }
+    ibShowLogin();
+  }
+  function ibOpen() {
+    ibMsgs = JSON.parse(localStorage.getItem(IB_KEY) || '[]');
+    document.getElementById('adminInbox').classList.add('open');
+    // move cursor elements inside inbox so they work
+    ibRender();
+  }
+  function ibClose() {
+    document.getElementById('adminInbox').classList.remove('open');
+  }
+  function ibLoginClose() {
+    document.getElementById('ibLoginScreen').classList.remove('open');
+    document.getElementById('ibSetupScreen').classList.remove('open');
+  }
+
+  // ── Setup (first time) ────────────────────────────────────
+  function ibShowSetup() {
+    document.getElementById('ibSetupScreen').classList.add('open');
+    document.getElementById('ibSetupUser').value = '';
+    document.getElementById('ibSetupPass').value = '';
+    document.getElementById('ibSetupPass2').value = '';
+    document.getElementById('ibSetupErr').textContent = '';
+    setTimeout(() => document.getElementById('ibSetupUser').focus(), 100);
+  }
+  function ibSetupSubmit() {
+    const u  = document.getElementById('ibSetupUser').value.trim();
+    const p  = document.getElementById('ibSetupPass').value;
+    const p2 = document.getElementById('ibSetupPass2').value;
+    const err = document.getElementById('ibSetupErr');
+    if (!u) { err.textContent = 'Username cannot be empty.'; return; }
+    if (p.length < 4) { err.textContent = 'Password must be at least 4 characters.'; return; }
+    if (p !== p2) { err.textContent = 'Passwords do not match.'; return; }
+    // Store hashed-ish (btoa for obfuscation)
+    localStorage.setItem('twinbyte_admin_creds', JSON.stringify({ u: btoa(u), p: btoa(p) }));
+    document.getElementById('ibSetupScreen').classList.remove('open');
+    ibToast('Admin account created! You can now log in.');
+    setTimeout(ibShowLogin, 400);
+  }
+
+  // ── Login ─────────────────────────────────────────────────
+  function ibShowLogin() {
+    document.getElementById('ibLoginScreen').classList.add('open');
+    document.getElementById('ibLoginUser').value = '';
+    document.getElementById('ibLoginPass').value = '';
+    document.getElementById('ibLoginErr').textContent = '';
+    setTimeout(() => document.getElementById('ibLoginUser').focus(), 100);
+  }
+  function ibLoginSubmit() {
+    const u   = document.getElementById('ibLoginUser').value.trim();
+    const p   = document.getElementById('ibLoginPass').value;
+    const err = document.getElementById('ibLoginErr');
+    const creds = JSON.parse(localStorage.getItem('twinbyte_admin_creds') || 'null');
+    if (!creds || btoa(u) !== creds.u || btoa(p) !== creds.p) {
+      err.textContent = 'Incorrect username or password.';
+      document.getElementById('ibLoginPass').value = '';
+      // shake
+      const box = document.getElementById('ibLoginBox');
+      box.style.animation = 'none'; box.offsetHeight;
+      box.style.animation = 'ibShake .4s ease';
+      return;
+    }
+    document.getElementById('ibLoginScreen').classList.remove('open');
+    ibOpen();
+  }
+  document.addEventListener('keydown', e => {
+    if (e.ctrlKey && e.shiftKey && e.key === 'I') { e.preventDefault(); ibTryOpen(); }
+    if (e.key === 'Escape') {
+      if (document.getElementById('adminInbox').classList.contains('open')) ibClose();
+      if (document.getElementById('ibLoginScreen').classList.contains('open')) ibLoginClose();
+    }
+  });
+
+  // ── Filter / sort ─────────────────────────────────────────
+  function ibSetFilter(f, el) {
+    ibFilter = f;
+    document.querySelectorAll('.ib-filter').forEach(b => b.classList.remove('on'));
+    el.classList.add('on');
+    ibRenderList();
+  }
+  function ibSetSort(v) { ibSort = v; ibRenderList(); }
+
+  function ibFiltered() {
+    let list = ibFilter === 'all' ? ibMsgs : ibMsgs.filter(m => m.status === ibFilter);
+    if (ibSort === 'newest') list = [...list].sort((a,b) => Number(b.id)-Number(a.id));
+    else if (ibSort === 'oldest') list = [...list].sort((a,b) => Number(a.id)-Number(b.id));
+    else list = [...list].sort((a,b) => a.name.localeCompare(b.name));
+    return list;
+  }
+
+  // ── Master render ─────────────────────────────────────────
+  function ibRender() { ibUpdateStats(); ibRenderList(); }
+
+  function ibUpdateStats() {
+    const fn = id => document.getElementById(id);
+    fn('ibsTotal').textContent    = ibMsgs.length;
+    fn('ibsNew').textContent      = ibMsgs.filter(m => m.status==='new').length;
+    fn('ibsReplied').textContent  = ibMsgs.filter(m => m.status==='replied').length;
+    fn('ibsArchived').textContent = ibMsgs.filter(m => m.status==='archived').length;
+    const newCount = ibMsgs.filter(m => m.status==='new').length;
+    fn('ibBadge').textContent = newCount;
+    fn('ibBadge').style.display = newCount > 0 ? '' : 'none';
+  }
+
+  function ibRenderList() {
+    const list = ibFiltered();
+    const wrap = document.getElementById('ibList');
+    wrap.innerHTML = '';
+    if (!list.length) {
+      wrap.innerHTML = '<div class="ib-empty"><div style="font-size:2.5rem;opacity:.15;margin-bottom:.75rem;">✉</div><div style="font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;opacity:.4;">No messages yet</div></div>';
+      return;
+    }
+    list.forEach((msg, i) => {
+      const el = document.createElement('div');
+      el.className = 'ib-item' + (msg.status==='new' ? ' unread' : '') + (msg.id===ibActive ? ' sel' : '');
+      el.style.animationDelay = (i * 0.04) + 's';
+      const timeStr = ibFmt(new Date(msg.timestamp));
+      const sLabel  = {new:'New', read:'Read', replied:'Replied', archived:'Archived'}[msg.status] || msg.status;
+      el.innerHTML = `
+        <div class="ib-row">
+          <div class="ib-name">${ibE(msg.name)}</div>
+          <div class="ib-time">${timeStr}</div>
+        </div>
+        <div class="ib-svc">${ibE(msg.service||'—')}</div>
+        <div class="ib-prev">${ibE(msg.message)}</div>
+        <div class="ib-tags">
+          <span class="ib-tag s-${msg.status}">${sLabel}</span>
+          ${msg.budget ? `<span class="ib-tag">${ibE(msg.budget)}</span>` : ''}
+          ${msg.company ? `<span class="ib-tag">${ibE(msg.company)}</span>` : ''}
+        </div>`;
+      el.addEventListener('click', () => ibOpenMsg(msg.id));
+      wrap.appendChild(el);
+    });
+  }
+
+  function ibOpenMsg(id) {
+    ibActive = id;
+    const msg = ibMsgs.find(m => m.id === id);
+    if (!msg) return;
+    if (msg.status === 'new') { msg.status = 'read'; ibSave(); }
+    ibRenderList();
+    ibRenderDetail(msg);
+  }
+
+  function ibRenderDetail(msg) {
+    document.getElementById('ibDetailEmpty').style.display = 'none';
+    const wrap = document.getElementById('ibDetailContent');
+    wrap.style.display = 'block';
+    const d    = new Date(msg.timestamp);
+    const full = d.toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})
+               + ' · ' + d.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+    wrap.innerHTML = `
+      <div class="ibd-svc">${ibE(msg.service||'Enquiry')}</div>
+      <div class="ibd-name">${ibE(msg.name)}</div>
+      <div class="ibd-meta">
+        <div class="ibd-mc"><div class="ibd-ml">Email</div><div class="ibd-mv"><a href="mailto:${ibE(msg.email)}">${ibE(msg.email)}</a></div></div>
+        ${msg.company ? `<div class="ibd-mc"><div class="ibd-ml">Company</div><div class="ibd-mv">${ibE(msg.company)}</div></div>` : ''}
+        <div class="ibd-mc"><div class="ibd-ml">Received</div><div class="ibd-mv">${full}</div></div>
+        <div class="ibd-mc"><div class="ibd-ml">Status</div><div class="ibd-mv" id="ibStatusVal">${ibE(msg.status)}</div></div>
+      </div>
+      <div class="ibd-msg-lbl">Message</div>
+      <div class="ibd-msg">${ibE(msg.message).replace(/\n/g,'<br>')}</div>
+      ${msg.budget ? `<div class="ibd-budget">Budget: ${ibE(msg.budget)}</div>` : ''}
+      <div class="ibd-nl">Internal Notes</div>
+      <textarea class="ibd-notes" placeholder="Add private notes…" oninput="ibSaveNotes('${msg.id}',this.value)">${ibE(msg.notes||'')}</textarea>
+      <div class="ibd-actions">
+        <button class="ib-btn ib-btn-p" onclick="ibReply('${ibE(msg.email)}','${ibE(msg.name)}')">✉ Reply</button>
+        <button class="ib-btn ib-btn-s" onclick="ibMark('${msg.id}','replied')">✓ Replied</button>
+        <button class="ib-btn ib-btn-s" onclick="ibMark('${msg.id}','archived')">◻ Archive</button>
+        <button class="ib-btn ib-btn-d" onclick="ibDelete('${msg.id}')">✕ Delete</button>
+      </div>`;
+  }
+
+  // ── Actions ───────────────────────────────────────────────
+  function ibMark(id, status) {
+    const m = ibMsgs.find(x => x.id===id);
+    if (!m) return;
+    m.status = status;
+    ibSave(); ibRender();
+    if (ibActive===id) ibRenderDetail(m);
+    ibToast('Marked as ' + status);
+  }
+  function ibDelete(id) {
+    ibMsgs = ibMsgs.filter(x => x.id!==id);
+    ibSave();
+    if (ibActive===id) {
+      ibActive = null;
+      document.getElementById('ibDetailEmpty').style.display = '';
+      document.getElementById('ibDetailContent').style.display = 'none';
+    }
+    ibRender();
+    ibToast('Message deleted');
+  }
+  function ibSaveNotes(id, val) {
+    const m = ibMsgs.find(x => x.id===id);
+    if (m) { m.notes = val; ibSave(); }
+  }
+  function ibReply(email, name) {
+    const sub  = encodeURIComponent('Re: Your enquiry — Twinbyte Technology');
+    const body = encodeURIComponent('Hi ' + name + ',\n\nThank you for reaching out to Twinbyte Technology!\n\n');
+    window.open('mailto:' + email + '?subject=' + sub + '&body=' + body);
+    ibMark(ibActive, 'replied');
+  }
+  function ibClearAll() {
+    if (!confirm('Delete ALL messages? This cannot be undone.')) return;
+    ibMsgs = []; ibSave(); ibActive = null;
+    document.getElementById('ibDetailEmpty').style.display = '';
+    document.getElementById('ibDetailContent').style.display = 'none';
+    ibRender();
+    ibToast('All messages cleared');
+  }
+
+  // ── Toast ─────────────────────────────────────────────────
+  let _tt;
+  function ibToast(msg) {
+    clearTimeout(_tt);
+    document.getElementById('ibToastMsg').textContent = msg;
+    const t = document.getElementById('ibToast');
+    t.classList.add('show');
+    _tt = setTimeout(() => t.classList.remove('show'), 2600);
+  }
+
+  // ── Helpers ───────────────────────────────────────────────
+  function ibE(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function ibFmt(d) {
+    const diff = Date.now() - d;
+    if (diff < 60000)    return 'just now';
+    if (diff < 3600000)  return Math.floor(diff/60000)   + 'm ago';
+    if (diff < 86400000) return Math.floor(diff/3600000)  + 'h ago';
+    if (diff < 604800000)return Math.floor(diff/86400000) + 'd ago';
+    return d.toLocaleDateString('en-IN',{day:'numeric',month:'short'});
+  }
+
+  // ── Init ──────────────────────────────────────────────────
+  ibUpdateStats();
+</script>
+
+<!-- ═══ ADMIN INBOX STYLES ═══════════════════════════════════════ -->
+<style>
+#adminInbox {
+  display: none; position: fixed; inset: 0;
+  background: var(--black); z-index: 50000;
+  flex-direction: column; overflow: hidden;
+  font-family: 'DM Sans', sans-serif;
+}
+#adminInbox.open { display: flex; }
+.ib-topbar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.1rem 2.5rem; border-bottom: 1px solid var(--border);
+  background: rgba(10,10,10,0.98); flex-shrink: 0; gap: 1rem;
+}
+.ib-topbar-logo { font-family:'Playfair Display',serif; font-size:1rem; color:var(--accent); letter-spacing:.05em; }
+.ib-topbar-title { font-size:.68rem; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); }
+.ib-topbar-right { display:flex; align-items:center; gap:.75rem; }
+#ibBadge {
+  background:var(--accent); color:var(--black); font-family:'Space Mono',monospace;
+  font-size:.62rem; font-weight:700; padding:.15rem .55rem; border-radius:2px;
+}
+.ib-x {
+  background:transparent; border:1px solid var(--border); color:var(--muted);
+  padding:.35rem .9rem; font-size:.68rem; letter-spacing:.12em; text-transform:uppercase;
+  cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s;
+}
+.ib-x:hover { border-color:var(--accent); color:var(--white); }
+.ib-statsbar {
+  display:flex; gap:2rem; padding:.8rem 2.5rem;
+  border-bottom:1px solid var(--border); background:rgba(200,169,110,.02); flex-shrink:0;
+}
+.ib-sc { display:flex; flex-direction:column; gap:.1rem; }
+.ib-sc-n { font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:900; color:var(--accent); line-height:1; }
+.ib-sc-l { font-size:.58rem; letter-spacing:.15em; text-transform:uppercase; color:var(--muted); }
+.ib-filterbar {
+  display:flex; gap:.35rem; padding:.8rem 2.5rem;
+  border-bottom:1px solid var(--border); flex-shrink:0; flex-wrap:wrap; align-items:center;
+}
+.ib-filter {
+  background:transparent; border:1px solid var(--border); color:var(--muted);
+  padding:.28rem .8rem; font-size:.65rem; letter-spacing:.1em; text-transform:uppercase;
+  cursor:pointer; transition:all .2s; font-family:'DM Sans',sans-serif;
+}
+.ib-filter.on { border-color:var(--accent); color:var(--accent); background:rgba(200,169,110,.06); }
+.ib-filter:hover:not(.on) { border-color:rgba(200,169,110,.4); color:var(--white); }
+.ib-sortsel {
+  margin-left:auto; background:transparent; border:1px solid var(--border); color:var(--muted);
+  padding:.28rem .65rem; font-size:.65rem; font-family:'DM Sans',sans-serif; cursor:pointer; outline:none;
+}
+.ib-sortsel option { background:#1a1a1a; color:var(--white); }
+.ib-clr {
+  background:transparent; border:1px solid rgba(192,57,43,.25); color:rgba(192,57,43,.6);
+  padding:.28rem .8rem; font-size:.65rem; letter-spacing:.1em; text-transform:uppercase;
+  cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s;
+}
+.ib-clr:hover { border-color:rgba(192,57,43,.55); color:#c0392b; }
+.ib-body { display:grid; grid-template-columns:320px 1fr; flex:1; overflow:hidden; }
+.ib-list { border-right:1px solid var(--border); overflow-y:auto; }
+.ib-list::-webkit-scrollbar { width:3px; }
+.ib-list::-webkit-scrollbar-thumb { background:var(--border); }
+.ib-empty { padding:3rem 1.5rem; text-align:center; color:var(--muted); }
+.ib-item {
+  padding:1.3rem 1.5rem; border-bottom:1px solid var(--border);
+  cursor:pointer; transition:background .2s; position:relative;
+}
+.ib-item:hover { background:rgba(200,169,110,.04); }
+.ib-item.sel { background:rgba(200,169,110,.08); border-left:2px solid var(--accent); }
+.ib-item.unread::after {
+  content:''; position:absolute; top:1.3rem; right:1.2rem;
+  width:6px; height:6px; background:var(--accent); border-radius:50%;
+}
+.ib-row { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:.3rem; gap:.5rem; }
+.ib-name { font-family:'Playfair Display',serif; font-size:.95rem; font-weight:700; }
+.ib-item.unread .ib-name { color:var(--white); }
+.ib-item:not(.unread) .ib-name { color:rgba(245,242,236,.5); }
+.ib-time { font-family:'Space Mono',monospace; font-size:.58rem; color:var(--muted); white-space:nowrap; }
+.ib-svc { font-size:.62rem; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); margin-bottom:.35rem; }
+.ib-prev { font-size:.8rem; color:var(--muted); line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.ib-tags { display:flex; gap:.3rem; margin-top:.55rem; flex-wrap:wrap; }
+.ib-tag { font-size:.56rem; letter-spacing:.08em; text-transform:uppercase; padding:.14rem .45rem; border:1px solid var(--border); color:var(--muted); }
+.ib-tag.s-new { border-color:rgba(200,169,110,.5); color:var(--accent); }
+.ib-tag.s-read { border-color:rgba(136,128,112,.2); color:#555; }
+.ib-tag.s-replied { border-color:rgba(74,103,65,.5); color:var(--accent2); }
+.ib-tag.s-archived { border-color:rgba(136,128,112,.15); color:#3a3832; }
+.ib-detail { overflow-y:auto; padding:2.2rem 2.8rem; }
+.ib-detail::-webkit-scrollbar { width:3px; }
+.ib-detail::-webkit-scrollbar-thumb { background:var(--border); }
+#ibDetailEmpty { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; gap:.75rem; color:var(--muted); }
+.ibd-svc { font-size:.62rem; letter-spacing:.15em; text-transform:uppercase; color:var(--accent); margin-bottom:.6rem; display:flex; align-items:center; gap:.5rem; }
+.ibd-svc::before { content:''; width:14px; height:1px; background:var(--accent); }
+.ibd-name { font-family:'Playfair Display',serif; font-size:2rem; font-weight:900; line-height:1.1; margin-bottom:.5rem; }
+.ibd-meta { display:flex; gap:1.5rem; flex-wrap:wrap; padding-bottom:1.5rem; border-bottom:1px solid var(--border); margin-bottom:1.5rem; }
+.ibd-mc { display:flex; flex-direction:column; gap:.12rem; }
+.ibd-ml { font-size:.58rem; letter-spacing:.15em; text-transform:uppercase; color:var(--muted); }
+.ibd-mv { font-size:.86rem; color:var(--white); }
+.ibd-mv a { color:var(--accent); text-decoration:none; }
+.ibd-mv a:hover { opacity:.7; }
+.ibd-msg-lbl { font-size:.6rem; letter-spacing:.15em; text-transform:uppercase; color:var(--muted); margin-bottom:.7rem; display:flex; align-items:center; gap:.5rem; }
+.ibd-msg-lbl::before { content:''; width:12px; height:1px; background:var(--border); }
+.ibd-msg { font-size:.96rem; line-height:1.8; color:rgba(245,242,236,.82); border-left:2px solid var(--border); padding-left:1.3rem; margin-bottom:1.3rem; }
+.ibd-budget { display:inline-block; border:1px solid var(--border); color:var(--accent); font-family:'Space Mono',monospace; font-size:.68rem; padding:.22rem .7rem; margin-bottom:1.8rem; }
+.ibd-nl { font-size:.6rem; letter-spacing:.15em; text-transform:uppercase; color:var(--muted); margin-bottom:.55rem; }
+.ibd-notes { width:100%; background:rgba(200,169,110,.03); border:1px solid var(--border); color:var(--white); font-family:'DM Sans',sans-serif; font-size:.86rem; line-height:1.6; padding:.85rem; resize:vertical; min-height:80px; outline:none; transition:border-color .25s; margin-bottom:1.8rem; }
+.ibd-notes:focus { border-color:rgba(200,169,110,.45); }
+.ibd-notes::placeholder { color:rgba(136,128,112,.4); }
+.ibd-actions { display:flex; gap:.65rem; flex-wrap:wrap; padding-top:1.3rem; border-top:1px solid var(--border); }
+.ib-btn { display:inline-flex; align-items:center; gap:.4rem; padding:.6rem 1.1rem; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; cursor:pointer; transition:all .2s; font-family:'DM Sans',sans-serif; border:none; }
+.ib-btn-p { background:var(--accent); color:var(--black); font-weight:500; }
+.ib-btn-p:hover { background:var(--white); }
+.ib-btn-s { background:transparent; color:var(--muted); border:1px solid var(--border); }
+.ib-btn-s:hover { border-color:var(--accent); color:var(--white); }
+.ib-btn-d { background:transparent; color:rgba(192,57,43,.65); border:1px solid rgba(192,57,43,.2); }
+.ib-btn-d:hover { border-color:rgba(192,57,43,.5); color:#c0392b; }
+#ibToast { position:fixed; bottom:1.8rem; right:1.8rem; background:#111; border:1px solid rgba(200,169,110,.4); color:var(--white); padding:.8rem 1.2rem; font-size:.78rem; display:flex; align-items:center; gap:.55rem; z-index:60000; transform:translateY(130%); transition:transform .35s cubic-bezier(.34,1.56,.64,1); }
+#ibToast.show { transform:translateY(0); }
+</style>
+
+<!-- ═══ ADMIN INBOX HTML ══════════════════════════════════════════ -->
+<div id="adminInbox">
+  <div class="ib-topbar">
+    <div class="ib-topbar-logo">Twinbyte Technology</div>
+    <div class="ib-topbar-title">Message Inbox</div>
+    <div class="ib-topbar-right">
+      <span id="ibBadge">0</span>
+      <button class="ib-x" onclick="ibClose()">✕ Close &nbsp;<small style="opacity:.5;font-size:.6rem">Esc</small></button>
+    </div>
+  </div>
+  <div class="ib-statsbar">
+    <div class="ib-sc"><div class="ib-sc-n" id="ibsTotal">0</div><div class="ib-sc-l">Total</div></div>
+    <div class="ib-sc"><div class="ib-sc-n" id="ibsNew">0</div><div class="ib-sc-l">New</div></div>
+    <div class="ib-sc"><div class="ib-sc-n" id="ibsReplied">0</div><div class="ib-sc-l">Replied</div></div>
+    <div class="ib-sc"><div class="ib-sc-n" id="ibsArchived">0</div><div class="ib-sc-l">Archived</div></div>
+  </div>
+  <div class="ib-filterbar">
+    <button class="ib-filter on" onclick="ibSetFilter('all',this)">All</button>
+    <button class="ib-filter"    onclick="ibSetFilter('new',this)">New</button>
+    <button class="ib-filter"    onclick="ibSetFilter('read',this)">Read</button>
+    <button class="ib-filter"    onclick="ibSetFilter('replied',this)">Replied</button>
+    <button class="ib-filter"    onclick="ibSetFilter('archived',this)">Archived</button>
+    <select class="ib-sortsel" onchange="ibSetSort(this.value)">
+      <option value="newest">Newest first</option>
+      <option value="oldest">Oldest first</option>
+      <option value="name">By name</option>
+    </select>
+    <button class="ib-clr" onclick="ibClearAll()">✕ Clear all</button>
+  </div>
+  <div class="ib-body">
+    <div class="ib-list" id="ibList"></div>
+    <div class="ib-detail" id="ibDetail">
+      <div id="ibDetailEmpty">
+        <div style="font-size:3rem;opacity:.1;">◎</div>
+        <div style="font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;opacity:.35;">Select a message to read</div>
+      </div>
+      <div id="ibDetailContent" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+<div id="ibToast"><span style="color:var(--accent)">✓</span><span id="ibToastMsg">Done</span></div>
+
+<div id="ibLoginScreen">
+  <div class="ibl-cursor" id="iblCursor"></div>
+  <div class="ibl-cursor-ring" id="iblRing"></div>
+  <div class="ibl-bg-text">Admin</div>
+  <div id="ibLoginBox" class="ibl-box">
+    <div class="ibl-logo">Twinbyte Technology</div>
+    <div class="ibl-tag">Admin Access</div>
+    <h2 class="ibl-title">Welcome <em>Back</em></h2>
+    <p class="ibl-sub">Enter your credentials to access the message inbox.</p>
+    <div class="ibl-field">
+      <label class="ibl-label">Username</label>
+      <input class="ibl-input" id="ibLoginUser" type="text" placeholder="admin" autocomplete="off"
+        onkeydown="if(event.key==='Enter')document.getElementById('ibLoginPass').focus()">
+    </div>
+    <div class="ibl-field">
+      <label class="ibl-label">Password</label>
+      <input class="ibl-input" id="ibLoginPass" type="password" placeholder="••••••"
+        onkeydown="if(event.key==='Enter')ibLoginSubmit()">
+    </div>
+    <div class="ibl-err" id="ibLoginErr"></div>
+    <button class="ibl-btn" onclick="ibLoginSubmit()"><span>Enter Inbox</span><span class="ibl-arrow">→</span></button>
+    <div class="ibl-footer">
+      <span onclick="ibResetCreds()" style="cursor:pointer;font-size:.65rem;color:rgba(136,128,112,.4);letter-spacing:.1em;text-transform:uppercase;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='rgba(136,128,112,.4)'">Reset credentials</span>
+    </div>
+  </div>
+</div>
+
+<div id="ibSetupScreen">
+  <div class="ibl-cursor" id="ibsCursor"></div>
+  <div class="ibl-cursor-ring" id="ibsRing"></div>
+  <div class="ibl-bg-text">Setup</div>
+  <div class="ibl-box" id="ibSetupBox">
+    <div class="ibl-logo">Twinbyte Technology</div>
+    <div class="ibl-tag">First Time Setup</div>
+    <h2 class="ibl-title">Create <em>Admin</em></h2>
+    <p class="ibl-sub">Set your username and password to protect the inbox.</p>
+    <div class="ibl-field">
+      <label class="ibl-label">Username</label>
+      <input class="ibl-input" id="ibSetupUser" type="text" placeholder="Choose a username" autocomplete="off"
+        onkeydown="if(event.key==='Enter')document.getElementById('ibSetupPass').focus()">
+    </div>
+    <div class="ibl-field">
+      <label class="ibl-label">Password</label>
+      <input class="ibl-input" id="ibSetupPass" type="password" placeholder="Choose a password"
+        onkeydown="if(event.key==='Enter')document.getElementById('ibSetupPass2').focus()">
+    </div>
+    <div class="ibl-field">
+      <label class="ibl-label">Confirm Password</label>
+      <input class="ibl-input" id="ibSetupPass2" type="password" placeholder="Repeat password"
+        onkeydown="if(event.key==='Enter')ibSetupSubmit()">
+    </div>
+    <div class="ibl-err" id="ibSetupErr"></div>
+    <button class="ibl-btn" onclick="ibSetupSubmit()"><span>Create Account</span><span class="ibl-arrow">→</span></button>
+  </div>
+</div>
+
+<style>
+/* ── Login / Setup screens ─────────────────────────────── */
+#ibLoginScreen, #ibSetupScreen {
+  display: none; position: fixed; inset: 0;
+  background: var(--black);
+  z-index: 55000;
+  align-items: center; justify-content: center;
+  overflow: hidden;
+  cursor: none;
+}
+#ibLoginScreen.open, #ibSetupScreen.open { display: flex; }
+
+/* animated bg text */
+.ibl-bg-text {
+  position: absolute; bottom: -3rem; right: -2rem;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(12rem, 25vw, 26rem);
+  font-weight: 900;
+  color: rgba(200,169,110,.03);
+  letter-spacing: -.05em;
+  line-height: 1;
+  user-select: none;
+  pointer-events: none;
+  animation: ibBgFloat 10s ease-in-out infinite;
+}
+@keyframes ibBgFloat {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-18px); }
+}
+
+/* card */
+.ibl-box {
+  position: relative; z-index: 2;
+  width: min(440px, 92vw);
+  border: 1px solid var(--border);
+  padding: 3rem 3rem 2.5rem;
+  background: rgba(10,10,10,.92);
+  backdrop-filter: blur(8px);
+  animation: ibFadeIn .45s cubic-bezier(.22,1,.36,1);
+}
+@keyframes ibFadeIn {
+  from { opacity:0; transform:translateY(24px) scale(.97); }
+  to   { opacity:1; transform:translateY(0)    scale(1);   }
+}
+@keyframes ibShake {
+  0%,100% { transform:translateX(0); }
+  20%,60% { transform:translateX(-8px); }
+  40%,80% { transform:translateX(8px); }
+}
+/* decorative corner */
+.ibl-box::before {
+  content:'';
+  position:absolute; top:0; left:0;
+  width:40px; height:40px;
+  border-top:2px solid var(--accent);
+  border-left:2px solid var(--accent);
+}
+.ibl-box::after {
+  content:'';
+  position:absolute; bottom:0; right:0;
+  width:40px; height:40px;
+  border-bottom:2px solid rgba(200,169,110,.35);
+  border-right:2px solid rgba(200,169,110,.35);
+}
+.ibl-logo {
+  font-family:'Playfair Display',serif;
+  font-size:.85rem; color:var(--accent); letter-spacing:.05em;
+  margin-bottom:1.8rem;
+}
+.ibl-tag {
+  font-size:.65rem; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--accent); margin-bottom:.75rem;
+  display:flex; align-items:center; gap:.6rem;
+}
+.ibl-tag::before { content:''; width:20px; height:1px; background:var(--accent); }
+.ibl-title {
+  font-family:'Playfair Display',serif;
+  font-size:2.4rem; font-weight:900; line-height:1; letter-spacing:-.02em;
+  margin-bottom:.6rem;
+}
+.ibl-title em { font-style:italic; color:var(--accent); }
+.ibl-sub { font-size:.84rem; color:var(--muted); line-height:1.6; margin-bottom:2rem; }
+.ibl-field { margin-bottom:1.2rem; }
+.ibl-label {
+  display:block; font-size:.62rem; letter-spacing:.15em; text-transform:uppercase;
+  color:var(--muted); margin-bottom:.45rem;
+}
+.ibl-input {
+  width:100%; background:rgba(200,169,110,.04);
+  border:1px solid var(--border); border-bottom:1px solid rgba(200,169,110,.4);
+  color:var(--white); font-family:'DM Sans',sans-serif; font-size:.95rem;
+  padding:.75rem 1rem; outline:none;
+  transition:border-color .25s, background .25s;
+}
+.ibl-input:focus {
+  border-color:rgba(200,169,110,.5);
+  background:rgba(200,169,110,.07);
+}
+.ibl-input::placeholder { color:rgba(136,128,112,.4); }
+.ibl-err {
+  font-size:.75rem; color:#c0392b; min-height:1.1rem;
+  margin-bottom:.75rem; letter-spacing:.05em;
+}
+.ibl-btn {
+  width:100%; display:flex; align-items:center; justify-content:center;
+  gap:.75rem; background:var(--accent); color:var(--black);
+  border:none; padding:.9rem 2rem;
+  font-size:.78rem; font-weight:500; letter-spacing:.1em; text-transform:uppercase;
+  font-family:'DM Sans',sans-serif; cursor:none;
+  transition:background .3s; margin-top:.5rem;
+}
+.ibl-btn:hover { background:var(--white); }
+.ibl-arrow { transition:transform .3s; }
+.ibl-btn:hover .ibl-arrow { transform:translateX(5px); }
+.ibl-footer { text-align:center; margin-top:1.5rem; }
+
+/* ── Cursor inside login/setup panels ─────────────────────── */
+.ibl-cursor {
+  width:10px; height:10px; background:var(--accent); border-radius:50%;
+  position:fixed; top:0; left:0; pointer-events:none; z-index:56000;
+  transform:translate(-50%,-50%); transition:width .3s, height .3s;
+}
+.ibl-cursor-ring {
+  width:36px; height:36px; border:1px solid var(--accent); border-radius:50%;
+  position:fixed; top:0; left:0; pointer-events:none; z-index:55999;
+  transform:translate(-50%,-50%); opacity:.6; transition:width .3s, height .3s;
+}
+</style>
+
+<script>
+  // ── Login screen cursor ────────────────────────────────────
+  (function() {
+    let lmx=0, lmy=0, lrx=0, lry=0;
+    const panels = ['ibLoginScreen','ibSetupScreen'];
+
+    // We reuse the main cursor tracker for both panels
+    document.addEventListener('mousemove', ev => { lmx=ev.clientX; lmy=ev.clientY; });
+
+    function animateLoginCursors() {
+      lrx += (lmx-lrx)*0.12; lry += (lmy-lry)*0.12;
+      panels.forEach((id, i) => {
+        const screen = document.getElementById(id);
+        if (!screen || !screen.classList.contains('open')) return;
+        const dot  = screen.querySelector('.ibl-cursor');
+        const ring = screen.querySelector('.ibl-cursor-ring');
+        if (!dot || !ring) return;
+        dot.style.left  = lmx+'px'; dot.style.top  = lmy+'px';
+        ring.style.left = lrx+'px'; ring.style.top = lry+'px';
+      });
+      requestAnimationFrame(animateLoginCursors);
+    }
+    animateLoginCursors();
+
+    // Grow cursor on hover for login elements
+    function bindLoginCursor(screenId) {
+      const screen = document.getElementById(screenId);
+      if (!screen) return;
+      screen.addEventListener('mouseover', ev => {
+        const t = ev.target.closest('button, input, a, [onclick]');
+        if (!t) return;
+        screen.querySelectorAll('.ibl-cursor').forEach(d => { d.style.width='18px'; d.style.height='18px'; });
+        screen.querySelectorAll('.ibl-cursor-ring').forEach(r => { r.style.width='52px'; r.style.height='52px'; });
+      });
+      screen.addEventListener('mouseout', ev => {
+        const t = ev.target.closest('button, input, a, [onclick]');
+        if (!t) return;
+        screen.querySelectorAll('.ibl-cursor').forEach(d => { d.style.width='10px'; d.style.height='10px'; });
+        screen.querySelectorAll('.ibl-cursor-ring').forEach(r => { r.style.width='36px'; r.style.height='36px'; });
+      });
+    }
+    // bind after DOM ready
+    document.addEventListener('DOMContentLoaded', () => {
+      bindLoginCursor('ibLoginScreen');
+      bindLoginCursor('ibSetupScreen');
+    });
+    // also bind now in case DOMContentLoaded already fired
+    bindLoginCursor('ibLoginScreen');
+    bindLoginCursor('ibSetupScreen');
+  })();
+
+  // ── Admin cursor (inside inbox panel) ─────────────────────
+  (function() {
+    // The main cursor already tracks mouse — we just need to show/hide
+    // based on which panel is open. The main cursor els have z-index 9999
+    // which is below the inbox z-index 50000, so we create dedicated ones.
+    const adminInbox = document.getElementById('adminInbox');
+
+    // inject cursor els into inbox
+    const adCursor = document.createElement('div');
+    adCursor.id = 'ibAdminCursor';
+    adCursor.style.cssText = 'width:10px;height:10px;background:var(--accent);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:51000;transform:translate(-50%,-50%);transition:width .3s,height .3s;';
+    const adRing = document.createElement('div');
+    adRing.id = 'ibAdminRing';
+    adRing.style.cssText = 'width:36px;height:36px;border:1px solid var(--accent);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:50999;transform:translate(-50%,-50%);opacity:.6;transition:width .3s,height .3s;';
+    document.body.appendChild(adCursor);
+    document.body.appendChild(adRing);
+
+    let amx=0,amy=0,arx=0,ary=0;
+    document.addEventListener('mousemove', ev => { amx=ev.clientX; amy=ev.clientY; });
+    function animateAdminCursor() {
+      arx += (amx-arx)*0.12; ary += (amy-ary)*0.12;
+      if (adminInbox && adminInbox.classList.contains('open')) {
+        adCursor.style.display='block'; adRing.style.display='block';
+        adCursor.style.left=amx+'px'; adCursor.style.top=amy+'px';
+        adRing.style.left=arx+'px';   adRing.style.top=ary+'px';
+      } else {
+        adCursor.style.display='none'; adRing.style.display='none';
+      }
+      requestAnimationFrame(animateAdminCursor);
+    }
+    animateAdminCursor();
+
+    // grow on hover
+    adminInbox.addEventListener('mouseover', ev => {
+      if (!ev.target.closest('button,input,select,textarea,a,.ib-item,[onclick]')) return;
+      adCursor.style.width='18px'; adCursor.style.height='18px';
+      adRing.style.width='52px';  adRing.style.height='52px';
+    });
+    adminInbox.addEventListener('mouseout', ev => {
+      if (!ev.target.closest('button,input,select,textarea,a,.ib-item,[onclick]')) return;
+      adCursor.style.width='10px'; adCursor.style.height='10px';
+      adRing.style.width='36px';  adRing.style.height='36px';
+    });
+  })();
+
+  // ── Reset credentials ──────────────────────────────────────
+  function ibResetCreds() {
+    if (!confirm('This will delete your admin credentials. You will need to set a new username and password.')) return;
+    localStorage.removeItem('twinbyte_admin_creds');
+    document.getElementById('ibLoginScreen').classList.remove('open');
+    ibToast('Credentials reset. Set new credentials on next open.');
+  }
+</script>
+
+<script>
+function toggleMenu() {
+  const menu = document.getElementById('mobileMenu');
+  const btn = document.getElementById('hamburger');
+  menu.classList.toggle('open');
+  btn.classList.toggle('open');
+  document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+}
+</script>
+</body>
+</html>
